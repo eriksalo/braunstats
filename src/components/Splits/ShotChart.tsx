@@ -28,6 +28,20 @@ function findZone(areas: ShootingRow[], name: string): ShootingRow | undefined {
   return areas.find(a => a.GROUP_VALUE === name)
 }
 
+function combineZones(areas: ShootingRow[], names: string[]): ShootingRow | undefined {
+  const matches = names.map(n => findZone(areas, n)).filter((z): z is ShootingRow => z != null)
+  if (matches.length === 0) return undefined
+  if (matches.length === 1) return matches[0]
+  const totalFGM = matches.reduce((s, z) => s + z.FGM, 0)
+  const totalFGA = matches.reduce((s, z) => s + (z.FGA ?? 0), 0)
+  return {
+    GROUP_VALUE: matches[0].GROUP_VALUE,
+    FGM: totalFGM,
+    FGA: totalFGA,
+    FG_PCT: totalFGA > 0 ? totalFGM / totalFGA : null,
+  }
+}
+
 function ZoneLabel({ x, y, zone }: { x: number; y: number; zone: ShootingRow | undefined }) {
   if (!zone) return null
   const pct = zone.FG_PCT != null ? (zone.FG_PCT * 100).toFixed(0) + '%' : '—'
@@ -74,12 +88,13 @@ function CourtLines() {
 }
 
 function ZoneView({ areas }: { areas: ShootingRow[] }) {
-  const ra = findZone(areas, 'Restricted Area')
-  const paint = findZone(areas, 'In The Paint (Non-RA)')
-  const mid = findZone(areas, 'Mid-Range')
+  // Support both nba_api zone names and BBRef distance names
+  const ra = findZone(areas, 'Restricted Area') ?? findZone(areas, 'At Rim')
+  const paint = findZone(areas, 'In The Paint (Non-RA)') ?? findZone(areas, '3 to <10 ft')
+  const mid = findZone(areas, 'Mid-Range') ?? combineZones(areas, ['10 to <16 ft', '16 ft to <3-pt'])
   const lc3 = findZone(areas, 'Left Corner 3')
   const rc3 = findZone(areas, 'Right Corner 3')
-  const atb3 = findZone(areas, 'Above the Break 3')
+  const atb3 = findZone(areas, 'Above the Break 3') ?? findZone(areas, '3-pt') ?? findZone(areas, '3pt')
 
   return (
     <>
