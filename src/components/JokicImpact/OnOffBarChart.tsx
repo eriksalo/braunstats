@@ -1,25 +1,25 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { CHART } from '../../utils/colors'
-import type { OnOffBaseStats } from '../../types'
+import type { OnOffAdvancedStats } from '../../types'
 
 interface OnOffBarChartProps {
-  on: OnOffBaseStats
-  off: OnOffBaseStats
+  on: OnOffAdvancedStats
+  off: OnOffAdvancedStats
 }
 
 export function OnOffBarChart({ on, off }: OnOffBarChartProps) {
   const stats = [
-    { name: 'PTS', on: on.PTS, off: off.PTS },
-    { name: 'REB', on: on.REB, off: off.REB },
-    { name: 'AST', on: on.AST, off: off.AST },
-    { name: 'FG%', on: +(on.FG_PCT * 100).toFixed(1), off: +(off.FG_PCT * 100).toFixed(1) },
-    { name: '3P%', on: +(on.FG3_PCT * 100).toFixed(1), off: +(off.FG3_PCT * 100).toFixed(1) },
-    { name: '+/-', on: on.PLUS_MINUS, off: off.PLUS_MINUS },
+    { name: 'ORtg', on: on.OFF_RATING, off: off.OFF_RATING },
+    { name: 'DRtg', on: on.DEF_RATING, off: off.DEF_RATING },
+    { name: 'Net', on: on.NET_RATING, off: off.NET_RATING },
+    { name: 'eFG%', on: +(on.EFG_PCT * 100).toFixed(1), off: +(off.EFG_PCT * 100).toFixed(1) },
+    { name: 'AST%', on: on.AST_PCT, off: off.AST_PCT },
+    { name: 'REB%', on: on.REB_PCT, off: off.REB_PCT },
   ]
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4">
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">Team Stats: Jokic On vs Off Court</h3>
+      <h3 className="text-sm font-semibold text-gray-700 mb-4">Team Ratings: Jokic On vs Off Court</h3>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={stats} barGap={2}>
           <CartesianGrid strokeDasharray="3 3" stroke={CHART.grid} />

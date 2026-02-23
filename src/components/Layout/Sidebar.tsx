@@ -24,8 +24,9 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <div className="flex items-center gap-2 px-4 py-5 border-b border-navy-light">
+        <div className="flex flex-col px-4 py-5 border-b border-navy-light">
           <span className="text-gold font-bold text-xl">BraunStats</span>
+          <span className="text-gray-400 text-xs mt-0.5">Miranda's Website</span>
         </div>
         <nav className="p-2 space-y-0.5">
           {NAV_ITEMS.map(item => (

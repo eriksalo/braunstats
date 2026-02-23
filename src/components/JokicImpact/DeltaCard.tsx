@@ -7,11 +7,13 @@ interface DeltaCardProps {
   delta: number
   formatDelta: (n: number) => string
   higherIsBetter?: boolean
+  invertColor?: boolean
 }
 
-export function DeltaCard({ label, onValue, offValue, delta, formatDelta, higherIsBetter = true }: DeltaCardProps) {
-  const isPositive = higherIsBetter ? delta > 0 : delta < 0
-  const isNegative = higherIsBetter ? delta < 0 : delta > 0
+export function DeltaCard({ label, onValue, offValue, delta, formatDelta, higherIsBetter = true, invertColor = false }: DeltaCardProps) {
+  const effectiveDelta = invertColor ? -delta : delta
+  const isPositive = higherIsBetter ? effectiveDelta > 0 : effectiveDelta < 0
+  const isNegative = higherIsBetter ? effectiveDelta < 0 : effectiveDelta > 0
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4">

@@ -12,8 +12,9 @@ export function OnOffRadar({ on, off }: OnOffRadarProps) {
     { stat: 'OFF RTG', on: on.OFF_RATING, off: off.OFF_RATING },
     { stat: 'DEF RTG', on: 130 - on.DEF_RATING, off: 130 - off.DEF_RATING },
     { stat: 'NET RTG', on: on.NET_RATING + 20, off: off.NET_RATING + 20 },
-    { stat: 'TS%', on: on.TS_PCT * 100, off: off.TS_PCT * 100 },
-    { stat: 'PACE', on: on.PACE, off: off.PACE },
+    { stat: 'eFG%', on: on.EFG_PCT * 100, off: off.EFG_PCT * 100 },
+    { stat: 'AST%', on: on.AST_PCT, off: off.AST_PCT },
+    { stat: 'REB%', on: on.REB_PCT, off: off.REB_PCT },
   ]
 
   return (
@@ -30,7 +31,7 @@ export function OnOffRadar({ on, off }: OnOffRadarProps) {
         </RadarChart>
       </ResponsiveContainer>
       <p className="text-xs text-gray-400 mt-2 text-center">
-        DEF RTG inverted (higher = better defense). NET RTG shifted +20 for visibility.
+        DEF RTG inverted (higher = better). NET RTG shifted +20. All stats are team-level.
       </p>
     </div>
   )
