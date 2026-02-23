@@ -1,12 +1,17 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { useAppContext } from '../hooks/useAppContext'
 import { CHART } from '../utils/colors'
-import { shootingSplits } from '../data'
+import { shootingSplits, shotChart } from '../data'
 import { ShotChart } from '../components/Splits/ShotChart'
+import { useMemo } from 'react'
 
 export function ShootingPage() {
   const { season } = useAppContext()
   const data = shootingSplits[season]
+  const seasonShots = useMemo(
+    () => shotChart.shots.filter(s => s.SEASON === season),
+    [season]
+  )
 
   if (!data) {
     return <p className="text-gray-400">No shooting data available for {season}.</p>
@@ -30,7 +35,7 @@ export function ShootingPage() {
     <div className="space-y-6 max-w-5xl">
       <h2 className="text-lg font-bold text-navy">Shooting Splits</h2>
 
-      <ShotChart areas={data.shot_area} />
+      <ShotChart areas={data.shot_area} shots={seasonShots} />
 
       <div className="bg-white rounded-xl border border-gray-200 p-4">
         <h3 className="text-sm font-semibold text-gray-700 mb-4">FG% by Shot Area</h3>

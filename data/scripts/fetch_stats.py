@@ -16,6 +16,7 @@ from nba_api.stats.endpoints import (
     PlayerDashboardByGeneralSplits,
     PlayerDashboardByShootingSplits,
     PlayerDashboardByYearOverYear,
+    ShotChartDetail,
 )
 
 BRAUN_ID = 1631128
@@ -285,6 +286,34 @@ def fetch_career():
     write_json("career.json", career_data)
 
 
+def fetch_shot_chart():
+    print("Fetching shot chart detail...")
+    all_shots = []
+
+    for season in SEASONS:
+        print(f"  Season {season}...")
+        try:
+            resp = retry_call(
+                ShotChartDetail,
+                player_id=BRAUN_ID,
+                team_id=NUGGETS_ID,
+                season_nullable=season,
+                context_measure_simple="FGA",
+            )
+            raw = resp.get_dict()
+            result_set = raw["resultSets"][0]
+            shots = rows_to_dicts(result_set)
+            for s in shots:
+                s["SEASON"] = season
+            all_shots.extend(shots)
+            print(f"    Found {len(shots)} shots")
+        except Exception as e:
+            print(f"    Warning: {e}")
+        api_delay()
+
+    write_json("shot_chart.json", {"shots": all_shots})
+
+
 def main():
     print("BraunStats Data Pipeline")
     print(f"Output directory: {OUTPUT_DIR}")
@@ -298,6 +327,7 @@ def main():
         ("General Splits", fetch_general_splits),
         ("Shooting Splits", fetch_shooting_splits),
         ("Career", fetch_career),
+        ("Shot Chart", fetch_shot_chart),
     ]
     succeeded = 0
     for name, fn in steps:

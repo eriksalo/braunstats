@@ -299,6 +299,26 @@ export interface CareerData {
   advanced: CareerAdvancedRow[]
 }
 
+// shot_chart.json
+export interface ShotDetail {
+  SEASON: string
+  GAME_ID: string
+  GAME_DATE: string
+  LOC_X: number
+  LOC_Y: number
+  SHOT_MADE_FLAG: number
+  SHOT_TYPE: string
+  SHOT_ZONE_BASIC: string
+  SHOT_ZONE_AREA: string
+  SHOT_DISTANCE: number
+  ACTION_TYPE: string
+  MATCHUP: string
+}
+
+export interface ShotChartData {
+  shots: ShotDetail[]
+}
+
 export type Season = '2022-23' | '2023-24' | '2024-25' | '2025-26'
 
 export const SEASONS: Season[] = ['2022-23', '2023-24', '2024-25', '2025-26']
